@@ -24,9 +24,12 @@ var elevatorCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		e := elevator.NewElevator("127.0.0.1")
+		e := elevator.NewElevator(*elevator.NewConfig().WithId("127.0.0.1").WithMaxSpeed(1))
+
+		elevator.Serve(cmd.Context(), e)
 
 		fmt.Printf("Serving Elevator at http://localhost%s\n", port)
+		http.HandleFunc("/", elevator.NewIndexHandler(e))
 		http.HandleFunc("/passengers", elevator.NewPassengerHandler(e))
 		fmt.Println(http.ListenAndServe(port, nil).Error())
 	},

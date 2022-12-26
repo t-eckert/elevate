@@ -15,7 +15,8 @@ var (
 )
 
 func TestBoarded(t *testing.T) {
-	e := elevator.NewElevator("test")
+	c := elevator.NewConfig().WithId("test")
+	e := elevator.NewElevator(*c)
 	expected := len(boarded)
 
 	for id, p := range queued {

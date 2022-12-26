@@ -2,6 +2,7 @@ package passenger
 
 import (
 	"math/rand"
+	"time"
 
 	"github.com/google/uuid"
 )
@@ -17,7 +18,7 @@ const (
 // Passenger is a person that requests a ride from their origin floor to their
 // destination floor. They will be assigned to an elevator and served.
 type Passenger struct {
-	id string
+	Id string `json:"id"`
 
 	// Status is the current status of the passenger on their trip: queued, onboard, or arrived.
 	Status Status
@@ -34,7 +35,7 @@ type Passenger struct {
 // will have a status of Queued.
 func NewPassenger(id string, origin, destination int) *Passenger {
 	return &Passenger{
-		id:          id,
+		Id:          id,
 		Status:      Queued,
 		Elevator:    "",
 		Origin:      origin,
@@ -48,7 +49,6 @@ func NewRandomPassenger() *Passenger {
 	return NewPassenger(uuid.NewString(), rand.Intn(30), rand.Intn(30))
 }
 
-// Id returns the unique id of the passenger.
-func (p *Passenger) Id() string {
-	return p.id
+func init() {
+	rand.Seed(time.Now().UnixNano())
 }

@@ -9,6 +9,25 @@ import (
 	"github.com/t-eckert/elevate/passenger"
 )
 
+func NewIndexHandler(e *Elevator) func(http.ResponseWriter, *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		switch r.Method {
+		case "GET":
+			elevator, err := json.Marshal(e)
+			if err != nil {
+				w.WriteHeader(http.StatusInternalServerError)
+				return
+			}
+			fmt.Fprint(w, string(elevator))
+			return
+		default:
+			w.WriteHeader(http.StatusMethodNotAllowed)
+			return
+		}
+	}
+
+}
+
 func NewPassengerHandler(e *Elevator) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {
@@ -34,7 +53,7 @@ func NewPassengerHandler(e *Elevator) func(http.ResponseWriter, *http.Request) {
 				return
 			}
 
-			e.Passengers[passenger.Id()] = &passenger
+			e.AddPassenger(&passenger)
 
 			w.WriteHeader(http.StatusOK)
 			return
