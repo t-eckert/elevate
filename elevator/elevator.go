@@ -9,6 +9,10 @@ import (
 )
 
 type Elevator struct {
+	// Id is the unique identifier of the elevator.
+	Id string
+	// Address is the address where the elevator can be reached.
+	Address string
 	// Floor is the floor where the elevator is currently located.
 	// It is a floating point number as the elevator may be between two floors.
 	Floor float64
@@ -20,19 +24,21 @@ type Elevator struct {
 	// These passengers will all be assigned to this elevator, but may
 	// have a status of queued, boarded, or arrived.
 	Passengers map[string]*passenger.Passenger
-	Path       []float64
+	// Path is the floors that the elevator will visit in the order that they will
+	// be visited.
+	Path []float64
 
-	id     string
 	config Config
 }
 
 func NewElevator(config Config) *Elevator {
 	return &Elevator{
+		Id:         config.Id,
+		Address:    config.Address(),
 		Floor:      0,
 		Velocity:   0,
 		Passengers: make(map[string]*passenger.Passenger, 50),
 		Path:       []float64{},
-		id:         config.Id,
 		config:     config,
 	}
 }
@@ -63,8 +69,8 @@ func (e *Elevator) Onboard() int {
 }
 
 func (e *Elevator) AddPassenger(p *passenger.Passenger) {
-	log.Infof("Adding passenger %s", p.Id[:6])
-	p.Elevator = e.id
+	log.Infof("Adding passenger %s", p)
+	p.Elevator = e.Id
 	e.Passengers[p.Id] = p
 	e.updatePath()
 }
@@ -90,6 +96,12 @@ func (e *Elevator) Move() {
 // AtFloor checks if the elevator is within range to pickup or drop off a passenger.
 func (e *Elevator) AtFloor(floor float64) bool {
 	return math.Abs(e.Floor-floor) < 0.3
+}
+
+
+// String returns a shortened segment of the elevators Id.
+func (e *Elevator) String() string {
+	return e.Id[:9]
 }
 
 func (e *Elevator) updatePath() {

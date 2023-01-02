@@ -1,13 +1,10 @@
-/*
-Copyright © 2022 NAME HERE <EMAIL ADDRESS>
-*/
 package cmd
 
 import (
 	"fmt"
 	"net/http"
-	"os"
 
+	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/t-eckert/elevate/elevator"
 )
@@ -18,25 +15,25 @@ var elevatorCmd = &cobra.Command{
 	Short: "TODO",
 	Long:  `TODO`,
 	Run: func(cmd *cobra.Command, args []string) {
-		port, err := cmd.Flags().GetString("port")
+		port, err := cmd.Flags().GetInt("port")
 		if err != nil {
-			fmt.Println(err.Error())
-			os.Exit(1)
+			log.Fatal(err.Error())
 		}
 
-		e := elevator.NewElevator(*elevator.NewConfig().WithId("127.0.0.1").WithMaxSpeed(1))
+		config := *elevator.NewConfig().WithPort(port)
+		e := elevator.NewElevator(config)
 
 		elevator.Serve(cmd.Context(), e)
 
-		fmt.Printf("Serving Elevator at http://localhost%s\n", port)
+		log.Infof("Serving Elevator at http://localhost:%d\n", port)
 		http.HandleFunc("/", elevator.NewIndexHandler(e))
 		http.HandleFunc("/passengers", elevator.NewPassengerHandler(e))
-		fmt.Println(http.ListenAndServe(port, nil).Error())
+		log.Error(http.ListenAndServe(fmt.Sprintf(":%d", port), nil).Error())
 	},
 }
 
 func init() {
 	runCmd.AddCommand(elevatorCmd)
 
-	elevatorCmd.Flags().StringP("port", "p", ":3000", "Port to serve the elevator on.")
+	elevatorCmd.Flags().IntP("port", "p", 4000, "Port to serve the elevator on.")
 }

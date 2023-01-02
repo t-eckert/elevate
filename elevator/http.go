@@ -18,7 +18,10 @@ func NewIndexHandler(e *Elevator) func(http.ResponseWriter, *http.Request) {
 				w.WriteHeader(http.StatusInternalServerError)
 				return
 			}
+
+			w.Header().Set("Content-Type", "application/json")
 			fmt.Fprint(w, string(elevator))
+
 			return
 		default:
 			w.WriteHeader(http.StatusMethodNotAllowed)
@@ -37,7 +40,10 @@ func NewPassengerHandler(e *Elevator) func(http.ResponseWriter, *http.Request) {
 				w.WriteHeader(http.StatusInternalServerError)
 				return
 			}
+			
+			w.Header().Set("Content-Type", "application/json")
 			fmt.Fprint(w, string(passengers))
+
 			return
 		case "POST":
 			body, err := io.ReadAll(r.Body)

@@ -49,6 +49,11 @@ func NewRandomPassenger() *Passenger {
 	return NewPassenger(uuid.NewString(), rand.Intn(30), rand.Intn(30))
 }
 
+// String returns a shortened segment of the passengers Id.
+func (p *Passenger) String() string {
+	return p.Id[:9]
+}
+
 func init() {
 	rand.Seed(time.Now().UnixNano())
 }
