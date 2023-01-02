@@ -20,6 +20,7 @@ type Elevator struct {
 	// These passengers will all be assigned to this elevator, but may
 	// have a status of queued, boarded, or arrived.
 	Passengers map[string]*passenger.Passenger
+	Path       []float64
 
 	id     string
 	config Config
@@ -30,6 +31,7 @@ func NewElevator(config Config) *Elevator {
 		Floor:      0,
 		Velocity:   0,
 		Passengers: make(map[string]*passenger.Passenger, 50),
+		Path:       []float64{},
 		id:         config.Id,
 		config:     config,
 	}
@@ -46,6 +48,7 @@ func (e *Elevator) PickupAndDropoff() {
 			p.Status = passenger.Arrived
 		}
 	}
+	e.updatePath()
 }
 
 // Onboard returns the number of passengers currently on board the elevator.
@@ -60,28 +63,15 @@ func (e *Elevator) Onboard() int {
 }
 
 func (e *Elevator) AddPassenger(p *passenger.Passenger) {
-	log.WithFields(log.Fields{"0_id": p.Id, "1_origin": p.Origin, "2_dest": p.Destination}).Info("Adding passenger")
+	log.Infof("Adding passenger %s", p.Id[:6])
 	p.Elevator = e.id
 	e.Passengers[p.Id] = p
-}
-
-func (e *Elevator) Path() []float64 {
-
-	floors := []float64{}
-	for _, p := range e.Passengers {
-		if p.Status == passenger.Queued {
-			floors = append(floors, float64(p.Origin))
-		}
-		if p.Status == passenger.Boarded {
-			floors = append(floors, float64(p.Destination))
-		}
-	}
-	return NewPathfinder(e.Floor, e.Velocity).Pathfind(floors)
+	e.updatePath()
 }
 
 // Navigate updates the velocity of the elevator
 func (e *Elevator) Navigate() {
-	path := e.Path()
+	path := e.Path
 
 	if len(path) == 0 {
 		e.Velocity = 0
@@ -100,4 +90,18 @@ func (e *Elevator) Move() {
 // AtFloor checks if the elevator is within range to pickup or drop off a passenger.
 func (e *Elevator) AtFloor(floor float64) bool {
 	return math.Abs(e.Floor-floor) < 0.3
+}
+
+func (e *Elevator) updatePath() {
+	floors := []float64{}
+	for _, p := range e.Passengers {
+		if p.Status == passenger.Queued {
+			floors = append(floors, float64(p.Origin))
+		}
+		if p.Status == passenger.Boarded {
+			floors = append(floors, float64(p.Destination))
+		}
+	}
+
+	e.Path = NewPathfinder(e.Floor, e.Velocity).Pathfind(floors)
 }

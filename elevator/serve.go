@@ -25,7 +25,7 @@ func Serve(ctx context.Context, e *Elevator) {
 	// Serve the passengers
 	go func() {
 		for {
-			path := e.Path()
+			path := e.Path
 			if len(path) == 0 {
 				continue
 			}
