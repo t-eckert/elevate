@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/require"
-	"github.com/t-eckert/elevate/elevator"
+	"github.com/t-eckert/elevate/internal/elevator"
 )
 
 func TestPathfinder(t *testing.T) {

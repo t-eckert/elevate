@@ -1,6 +1,8 @@
 package elevator
 
 import (
+	"context"
+
 	"github.com/t-eckert/elevate/internal/passenger"
 )
 
@@ -20,6 +22,10 @@ func NewElevator() *Elevator {
 		Velocity:   0,
 		passengers: []*passenger.Passenger{},
 	}
+}
+
+func (e *Elevator) Serve(ctx context.Context) error {
+	return nil
 }
 
 func (e *Elevator) AddPassenger(p *passenger.Passenger) {

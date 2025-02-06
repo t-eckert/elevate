@@ -1,7 +1,21 @@
 package main
 
-import "fmt"
+import (
+	"context"
+	"log"
+
+	"github.com/t-eckert/elevate/internal/elevator"
+)
 
 func main() {
-	fmt.Println("Elevator")
+	log.Println("Starting elevator")
+	ctx := context.Background()
+
+	elevator := elevator.NewElevator()
+	log.Printf("Elevator created with ID: %d", elevator.ID)
+
+	err := elevator.Serve(ctx)
+	if err != nil {
+		log.Fatal(err)
+	}
 }
