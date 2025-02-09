@@ -1,3 +1,4 @@
 package config
 
-type ControlplaneConfig struct{}
+type ControlplaneConfig struct {
+}

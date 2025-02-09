@@ -1,11 +1,14 @@
 package passenger
 
+import "fmt"
+
 type Status int
 
 const (
 	Queued  Status = 0
-	Boarded Status = 1
-	Arrived Status = 2
+	Waiting Status = 1
+	Boarded Status = 2
+	Arrived Status = 3
 )
 
 type Passenger struct {
@@ -23,4 +26,8 @@ func NewPassenger() *Passenger {
 		Origin:      0,
 		Destination: 0,
 	}
+}
+
+func (p *Passenger) String() string {
+	return fmt.Sprintf("Passenger %d: Origin %d, Destination %d, Status %d", p.ID, p.Origin, p.Destination, p.Status)
 }

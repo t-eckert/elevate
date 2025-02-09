@@ -9,6 +9,7 @@ type Pathfinder struct {
 	velocity     float64
 }
 
+// NewPathfinder creates a new Pathfinder with the given current floor and velocity.
 func NewPathfinder(currentFloor, velocity float64) *Pathfinder {
 	return &Pathfinder{
 		currentFloor: currentFloor,
