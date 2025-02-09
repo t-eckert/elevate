@@ -17,18 +17,12 @@ This is a raft-replicated server that can take requests from passengers and rout
 ### `elevator`
 
 This is a client that can accept passengers, navigate themselves to a given floor (simulated), and drop off passengers.
-
-- [x] The elevator component creates a new instance of the elevator
-- [ ] 
-- [ ] 
-- [ ] 
-- [ ] 
-- [ ] 
-- [ ] 
-
 How should the elevator step through its path?
 I made a simple pathfinder.
 Should the Elevator manage its own current location and velocity or should the server control that?
+
+Elevator needs the availability function.
+The server needs to receive passenger requests.
 
 
 ### `CLI`
