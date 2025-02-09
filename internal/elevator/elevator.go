@@ -13,7 +13,9 @@ import (
 
 // Elevator is a representation of an elevator in the system.
 type Elevator struct {
+	// RequestChan is a channel for passengers to request an elevator.
 	RequestChan chan *passenger.Passenger
+	// DropoffChan is a channel for passengers to be dropped off at their destination.
 	DropoffChan chan *passenger.Passenger
 
 	id         int

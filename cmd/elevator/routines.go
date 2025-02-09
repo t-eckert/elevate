@@ -43,14 +43,13 @@ func handleDropoffs(_ context.Context, elevator *elevator.Elevator) {
 	}
 }
 
-func logElevatorState(ctx context.Context, elevator *elevator.Elevator) {
-
+func logElevatorState(ctx context.Context, e *elevator.Elevator) {
 	for {
 		select {
 		case <-ctx.Done():
 			return
 		default:
-			log.Printf("%s", elevator)
+			log.Printf("Elevator:%d;V:%.2f;P:%.2f;On:%d;Rq:%d", e.ID(), e.Velocity()*1000, e.Position(), len(e.Passengers()), len(e.Requests()))
 			time.Sleep(time.Second)
 		}
 	}

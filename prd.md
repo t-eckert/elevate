@@ -69,6 +69,7 @@ Elevate is a cloud-native elevator management system. It consists of a control p
    - Priority: 4
 
 #### Additional Features
+
 1. Local Deployment
    - Description: a simple deployment of the system on a local machine.
    - Acceptance Criteria: the system can be run on a local machine without any external dependencies.
@@ -143,25 +144,11 @@ Elevate is a cloud-native elevator management system. It consists of a control p
 
 ### Non-Functional Requirements
 
-#### Performance
-
 - The elevators should travel at a gated speed that would make sense for a human passenger.
 - The control plane should be able to handle a large number of passenger requests per second.
 - The system should be able to handle a large number of elevator servers.
 - The control plane should self-recover from failures.
 - The elevator servers should self-recover from failures.
-
-#### Security
-
-- Authentication requirements
-- Data protection needs
-- Compliance requirements
-
-#### Usability
-
-- Accessibility standards
-- UI/UX requirements
-- Supported devices/browsers
 
 ## Technical Specifications
 
